@@ -117,7 +117,10 @@ export function initHeader() {
   if (page === 'about') $$('.nav a[href="/about.html"]').forEach((a) => a.classList.add('is-active'));
 
   // active nav pill follows the section in view (home only — other pages keep their fixed state)
-  if (page !== 'home') return;
+  if (page !== 'home') {
+    initMobileNav();
+    return;
+  }
   $$('main section[id]').forEach((sec) => {
     ScrollTrigger.create({
       trigger: sec,
@@ -125,10 +128,65 @@ export function initHeader() {
       end: 'bottom center',
       onToggle: (self) => {
         if (!self.isActive) return;
-        $$('.nav a').forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === `#${sec.id}` || a.dataset.section === sec.id));
+        $$('.nav a, .mobile-drawer__link').forEach((a) => a.classList.toggle('is-active', a.getAttribute('href') === `#${sec.id}` || a.getAttribute('href') === `/#${sec.id}` || a.dataset.section === sec.id));
       },
     });
   });
+
+  initMobileNav();
+}
+
+/* ───────── Mobile navigation drawer ───────── */
+export function initMobileNav() {
+  const toggle = $('.mobile-nav-toggle');
+  const drawer = $('.mobile-drawer');
+  if (!toggle || !drawer) return;
+
+  const backdrop = $('.mobile-drawer__backdrop', drawer);
+  const links = $$('.mobile-drawer__link, .mobile-drawer__cta', drawer);
+
+  function openMenu() {
+    toggle.classList.add('is-active');
+    toggle.setAttribute('aria-expanded', 'true');
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('has-mobile-nav-open');
+  }
+
+  function closeMenu() {
+    toggle.classList.remove('is-active');
+    toggle.setAttribute('aria-expanded', 'false');
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('has-mobile-nav-open');
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = drawer.classList.contains('is-open');
+    if (isOpen) closeMenu();
+    else openMenu();
+  });
+
+  backdrop?.addEventListener('click', closeMenu);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeMenu();
+  });
+
+  links.forEach((a) => {
+    a.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
+  const page = document.body.dataset.page;
+  if (page === 'work' || page === 'case') {
+    $$('.mobile-drawer__link[data-section="work"]').forEach((a) => a.classList.add('is-active'));
+  }
+  if (page === 'about') {
+    $$('.mobile-drawer__link[href="/about.html"]').forEach((a) => a.classList.add('is-active'));
+  }
 }
 
 /* ───────── Footer: works index + back-to-top ───────── */

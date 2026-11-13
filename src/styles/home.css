@@ -117,6 +117,14 @@ a.brand__tile:focus-visible { outline: 2px solid var(--blush); outline-offset: 3
   .brand__name { padding: 7px 6px; font-size: 8.5px; letter-spacing: 0.04em; }
   .brand--you .brand__name { font-size: 11px; }
 }
+@media (max-width: 480px) {
+  .brands__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .brand__tile { border-radius: 14px; }
+  .brand__name { padding: 9px 8px; font-size: 11px; letter-spacing: 0.04em; }
+  .brand--you .brand__name { font-size: 12.5px; }
+  .brand__reveal b { font-size: 20px; }
+  .brand__reveal span { font-size: 10px; }
+}
 /* no hover on touch: show the number under the logo instead */
 @media (hover: none) {
   .brand__reveal { position: static; translate: none; background: none; color: var(--cherry); padding: 0 10px 12px; gap: 0; }
@@ -264,7 +272,7 @@ a.brand__tile:focus-visible { outline: 2px solid var(--blush); outline-offset: 3
   box-shadow: 0 10px 20px rgba(58, 14, 20, 0.4), inset 0 0 0 5px rgba(0, 0, 0, 0.12);
   transform: scale(0) rotate(-30deg); pointer-events: none;
 }
-.contact__or { margin: 44px auto 0; max-width: 56ch; font-size: 16px; color: var(--ink-soft); }
+.contact__or { margin: 44px auto 0; max-width: 56ch; font-size: 16px; color: var(--ink-soft); overflow-wrap: break-word; }
 .contact__or .script { font-size: 22px; color: var(--cherry); }
 .contact__or b { color: var(--wine); }
 
@@ -297,3 +305,8 @@ a.brand__tile:focus-visible { outline: 2px solid var(--blush); outline-offset: 3
 .socials__link:hover i { transform: translate(2px, -2px); }
 
 @media (max-width: 760px) { .contact__cards { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .sign { padding: 18px clamp(24px, 6vw, 40px); }
+  .sign__stamp { width: 84px; height: 84px; font-size: 18px; right: -16px; top: -32px; }
+  .contact-card__list li { font-size: 15px; }
+}

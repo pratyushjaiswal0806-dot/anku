@@ -182,6 +182,11 @@ export function render() {
     </section>
 
     <div class="case-body">
+      <nav class="case-toc-mobile" aria-label="In this case file">
+        <div class="case-toc-mobile__track">
+          ${toc.map((t) => `<a href="#${t.id}" class="case-toc-mobile__pill" data-toc="${t.id}"><i>${t.no}</i><span>${t.label}</span></a>`).join('')}
+        </div>
+      </nav>
       <aside class="case-toc" aria-label="In this case file">
         <span class="smallcaps case-toc__head">in this case file</span>
         <ol>${toc.map((t) => `<li><a href="#${t.id}" data-toc="${t.id}"><i>${t.no}</i>${t.label}</a></li>`).join('')}</ol>
@@ -240,7 +245,7 @@ export async function intro() {
 
 /* contents sidebar follows the chapter in view */
 function initToc() {
-  const links = $$('.case-toc a');
+  const links = $$('.case-toc a, .case-toc-mobile a');
   const set = (id) => links.forEach((a) => a.classList.toggle('is-active', a.dataset.toc === id));
   links.forEach((a) => {
     const sec = $(`#${a.dataset.toc}`);

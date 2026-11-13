@@ -143,11 +143,42 @@
 .case-pager__link:hover .script, .case-pager__link:hover .case-pager__hook { color: var(--blush); }
 .case-pager__link:hover .case-pager__title { letter-spacing: -0.035em; }
 
+/* Desktop: mobile TOC jump rail remains hidden */
+.case-toc-mobile { display: none; }
+
 /* ── responsive ── */
 @media (max-width: 1000px) {
   .case-body { grid-template-columns: minmax(0, 1fr); }
   .case-toc { display: none; }
   .gallery { columns: 2; }
+
+  .case-toc-mobile {
+    display: block; position: sticky; top: var(--header-h); z-index: 15;
+    background: rgba(251, 246, 243, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    padding: 10px var(--pad); margin: 0 calc(var(--pad) * -1);
+    border-bottom: 1px solid rgba(90, 24, 32, 0.12);
+  }
+  .case-toc-mobile__track {
+    display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; padding: 2px 0;
+  }
+  .case-toc-mobile__track::-webkit-scrollbar { display: none; }
+  .case-toc-mobile__pill {
+    flex-shrink: 0; display: inline-flex; align-items: baseline; gap: 6px;
+    padding: 7px 14px; border-radius: 999px;
+    background: rgba(90, 24, 32, 0.06); font-family: var(--display);
+    font-size: 13px; font-weight: 600; text-transform: lowercase; color: var(--wine);
+    transition: background 0.3s, color 0.3s;
+  }
+  .case-toc-mobile__pill i {
+    font-family: var(--sans); font-size: 10px; font-weight: 700; color: var(--cherry); font-style: normal;
+  }
+  .case-toc-mobile__pill:hover, .case-toc-mobile__pill.is-active {
+    background: var(--wine); color: var(--sky);
+  }
+  .case-toc-mobile__pill.is-active i {
+    color: var(--blush);
+  }
 }
 @media (max-width: 860px) {
   .case-hero__grid { grid-template-columns: 1fr; }
@@ -155,6 +186,7 @@
   .case-facts { grid-template-columns: 1fr 1fr; }
   .case-facts__item, .case-facts__item + .case-facts__item { padding: 16px 12px 16px 0; border-left: 0; border-top: 1px solid rgba(90, 24, 32, 0.12); }
   .case-facts__item:nth-child(-n + 2) { border-top: 0; }
+  .case-outcome__num { font-size: clamp(60px, 16vw, 300px); }
   .cs-cards, .cs-campaigns, .case-stats, .more-work__grid { grid-template-columns: 1fr; }
   .case-pager { grid-template-columns: 1fr; }
   .case-pager__link--prev { border-right: 0; border-bottom: 1.5px solid rgba(90, 24, 32, 0.15); }

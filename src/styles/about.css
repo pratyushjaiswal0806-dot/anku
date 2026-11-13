@@ -35,7 +35,12 @@
 .principle h3 em { font-family: var(--serif); font-weight: 400; letter-spacing: 0; }
 .principle p { font-size: 15px; opacity: 0.85; }
 @media (max-width: 960px) { .method__grid { grid-template-columns: 1fr 1fr; } .about-hero__grid { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .method__grid { grid-template-columns: 1fr; } .principle { min-height: 0; } }
+@media (max-width: 600px) {
+  .about-hero { padding: calc(var(--header-h) + 24px) var(--pad) clamp(50px, 8vw, 80px); }
+  .about-hero__title { font-size: clamp(48px, 11vw, 190px); }
+  .method__grid { grid-template-columns: 1fr; }
+  .principle { min-height: 0; }
+}
 
 .beyond { background: var(--wine); color: var(--sky); padding: clamp(90px, 11vw, 150px) var(--pad); }
 .beyond__head { margin-bottom: clamp(40px, 6vw, 70px); }

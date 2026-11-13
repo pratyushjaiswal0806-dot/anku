@@ -43,7 +43,30 @@ const shell = ({ title, description, body, main }) => `<!doctype html>
         <a href="/#contact" data-label="contact">contact</a>
       </nav>
       <a href="/#contact" class="status" data-magnetic data-label="contact"><span class="status__dot"></span>open to new briefs</a>
+      <button class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="mobile-nav-toggle__bar"></span>
+        <span class="mobile-nav-toggle__bar"></span>
+      </button>
     </header>
+    <div class="mobile-drawer" id="mobile-nav" aria-hidden="true">
+      <div class="mobile-drawer__backdrop"></div>
+      <div class="mobile-drawer__dialog" role="dialog" aria-modal="true" aria-label="Navigation menu">
+        <nav class="mobile-drawer__nav">
+          <a href="/#brands" class="mobile-drawer__link" data-label="brands"><i>01</i> brands</a>
+          <a href="/#expertise" class="mobile-drawer__link" data-label="expertise"><i>02</i> expertise</a>
+          <a href="/work/" class="mobile-drawer__link" data-label="work" data-section="work"><i>03</i> work</a>
+          <a href="/about.html" class="mobile-drawer__link" data-label="about"><i>04</i> about</a>
+          <a href="/#contact" class="mobile-drawer__link" data-label="contact"><i>05</i> contact</a>
+        </nav>
+        <div class="mobile-drawer__foot">
+          <a href="/#contact" class="btn btn--wine mobile-drawer__cta" data-label="contact"><span>open to new briefs</span><i>↘</i></a>
+          <div class="mobile-drawer__meta">
+            <a href="mailto:ankitashah.work@gmail.com" class="u-link">ankitashah.work@gmail.com</a>
+            <span class="smallcaps">local time in india — <span class="clock">--:--</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="progress" aria-hidden="true"><span></span></div>
 
     <main id="main">${main}</main>
