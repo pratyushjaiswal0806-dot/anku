@@ -19,7 +19,7 @@ function metricHtml(c) {
 export function workCard(c, { variant = 'grid', wide = false } = {}) {
   const no = pad(cases.indexOf(c) + 1);
   const media = c.cover
-    ? `<img src="${c.cover}" alt="${c.brand} campaign" loading="lazy" decoding="async" class="${c.coverFit === 'contain' ? 'is-contain' : ''}" />`
+    ? `<img src="${c.cover}" alt="${c.brand} campaign" width="400" height="300" loading="lazy" decoding="async" class="${c.coverFit === 'contain' ? 'is-contain' : ''}" />`
     : `<span class="work-card__type"><span>${c.brand}</span></span>`;
 
   return `

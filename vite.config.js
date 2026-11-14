@@ -16,8 +16,14 @@ export default defineConfig({
   plugins: [react()],
   resolve: { alias: { '@': resolve(import.meta.dirname, 'src') } },
   build: {
+    target: 'es2022',
     rollupOptions: {
-      input: { main: resolve(import.meta.dirname, 'index.html'), about: resolve(import.meta.dirname, 'about.html'), ...workPages },
+      input: {
+        main: resolve(import.meta.dirname, 'index.html'),
+        about: resolve(import.meta.dirname, 'about.html'),
+        contact: resolve(import.meta.dirname, 'contact.html'),
+        ...workPages,
+      },
     },
   },
 });

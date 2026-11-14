@@ -180,14 +180,50 @@ function initEyes() {
     }
   });
   if (!finePointer || reduceMotion) return;
-  const pupils = sets.flatMap((el) => $$('.dd__f', el).map((p) => ({ p, host: el, x: gsap.quickTo(p, 'x', { duration: 0.4, ease: 'power3' }), y: gsap.quickTo(p, 'y', { duration: 0.4, ease: 'power3' }) })));
-  window.addEventListener('mousemove', (e) => {
-    pupils.forEach(({ host, x, y }) => {
-      const r = host.getBoundingClientRect();
-      if (r.bottom < -200 || r.top > innerHeight + 200) return;
-      const a = Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2));
-      x(Math.cos(a) * 5); y(Math.sin(a) * 4);
+  const pupils = sets.flatMap((el) =>
+    $$('.dd__f', el).map((p) => ({
+      p,
+      host: el,
+      r: null,
+      x: gsap.quickTo(p, 'x', { duration: 0.4, ease: 'power3' }),
+      y: gsap.quickTo(p, 'y', { duration: 0.4, ease: 'power3' }),
+    }))
+  );
+
+  const updateRects = () => {
+    pupils.forEach((item) => {
+      item.r = item.host.getBoundingClientRect();
     });
-  }, { passive: true });
+  };
+  window.addEventListener('scroll', updateRects, { passive: true });
+  window.addEventListener('resize', updateRects, { passive: true });
+
+  let ticking = false;
+  let lastEvent = null;
+
+  window.addEventListener(
+    'mousemove',
+    (e) => {
+      lastEvent = e;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          if (!lastEvent) return;
+          const cx = lastEvent.clientX;
+          const cy = lastEvent.clientY;
+          pupils.forEach((item) => {
+            if (!item.r) item.r = item.host.getBoundingClientRect();
+            const r = item.r;
+            if (r.bottom < -100 || r.top > innerHeight + 100) return;
+            const a = Math.atan2(cy - (r.top + r.height / 2), cx - (r.left + r.width / 2));
+            item.x(Math.cos(a) * 5);
+            item.y(Math.sin(a) * 4);
+          });
+        });
+      }
+    },
+    { passive: true }
+  );
 }
 

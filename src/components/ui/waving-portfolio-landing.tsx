@@ -244,7 +244,7 @@ export type WavingPortfolioLandingProps = {
   title?: string
   /** Signature badge text; a "/" breaks the line. Defaults to the first name split in two. */
   signature?: string
-  /** Speech bubble shown while he waves. */
+  /** Speech bubble shown while she waves. */
   greeting?: string
   accent?: string
   paper?: string
@@ -535,7 +535,7 @@ export default function WavingPortfolioLanding({
                 onClick={wave}
                 onKeyDown={onCharKey}
               >
-                <Character ink={ink} paper={paper} shirtId={"wpl-" + uid + "-shirt"} headRef={headRef} />
+                <Character ink={ink} paper={paper} accent={accent} shirtId={"wpl-" + uid + "-shirt"} headRef={headRef} />
               </g>
             </svg>
           </g>
@@ -544,7 +544,7 @@ export default function WavingPortfolioLanding({
             <g className="wpl-bubble" aria-hidden="true">
               <path
                 d={
-                  "M " + (charLeft + 372 * k) + " 20 h " + bubbleW + " v 56 h " + -(bubbleW - 34) +
+                  "M " + (charLeft + 340 * k) + " 20 h " + bubbleW + " v 56 h " + -(bubbleW - 34) +
                   " l -30 22 l 6 -22 h -10 Z"
                 }
                 fill={paper}
@@ -552,7 +552,7 @@ export default function WavingPortfolioLanding({
                 strokeWidth={4}
                 strokeLinejoin="round"
               />
-              <text className="wpl-label wpl-bubble-text" x={charLeft + 372 * k + bubbleW / 2} y={58} textAnchor="middle">
+              <text className="wpl-label wpl-bubble-text" x={charLeft + 340 * k + bubbleW / 2} y={58} textAnchor="middle">
                 {greeting.toUpperCase()}
               </text>
             </g>
@@ -800,118 +800,145 @@ function Signature({ lines, color }: { lines: string[]; color: string }) {
 }
 
 // #region character
-// Local frame 0 0 460 600; the bottom edge is the baseline he rises from.
-// Rig pivots (mirrored in the CSS transform-origins): tilt/breathe at the feet
-// (205, 600), shoulder (288, 248), elbow (348, 346), wrist (392, 216), neck
-// (203, 200).
+// Local frame 0 0 460 600; the bottom edge is the baseline she walks on.
+// A girl mid-stride, snapping a selfie with one hand, the other in her jacket
+// pocket. Rig pivots (mirrored in the CSS transform-origins): tilt/bob at the
+// feet (205, 600), hips (236, 335), shoulder (205, 238), elbow (112, 292),
+// wrist (106, 196), neck (236, 190).
 function Character({
   ink,
   paper,
+  accent,
   shirtId,
   headRef,
 }: {
   ink: string
   paper: string
+  accent: string
   shirtId: string
   headRef: React.Ref<SVGGElement>
 }) {
-  const torso =
-    "M 120 240 C 134 222 166 213 202 213 C 240 213 272 221 290 238 C 300 285 298 345 292 392 C 288 440 288 478 290 520 L 120 520 C 120 478 118 440 114 392 C 108 345 108 285 120 240 Z"
-  const limb = (d: string, w: number) => (
+  const grid = (x0: number, x1: number, y0: number, y1: number, sx: number, sy: number) => {
+    let d = ""
+    for (let x = x0; x <= x1; x += sx) d += "M " + x + " " + y0 + " L " + x + " " + y1 + " "
+    for (let y = y0; y <= y1; y += sy) d += "M " + x0 + " " + y + " L " + x1 + " " + y + " "
+    return d
+  }
+  const limb = (d: string, w: number, fill: string) => (
     <>
       <path d={d} fill="none" stroke={ink} strokeWidth={w + 8} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={d} fill="none" stroke={paper} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={d} fill="none" stroke={fill} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" />
     </>
   )
-  const fingers = ["M 388 170 L 380 116", "M 399 166 L 399 106", "M 410 168 L 418 112", "M 419 178 L 434 136", "M 382 192 L 352 170"]
-  const specks = Array.from({ length: 64 }, (_, k) => [110 + hash(k * 3.1) * 190, 215 + hash(k * 5.7 + 1) * 305, 1 + hash(k * 9.3 + 2) * 1.8])
+  const topP = "M 206 205 L 266 205 L 272 335 L 210 335 Z"
+  const jacketL =
+    "M 205 200 C 175 210 158 235 158 262 C 150 320 142 370 138 410 L 218 424 C 216 380 218 340 222 290 L 214 206 Z"
+  const jacketR =
+    "M 262 204 C 296 212 316 236 322 270 C 334 320 332 370 322 408 L 252 414 C 254 380 260 340 262 296 Z"
+  const ids = [shirtId + "t", shirtId + "l", shirtId + "r"]
+  const curls: [number, number, number][] = [
+    [196, 120, 26], [192, 160, 28], [200, 200, 26], [285, 115, 28], [300, 155, 32], [292, 200, 30], [250, 72, 34],
+  ]
   return (
-    <g className="wpl-rise">
-      <g className="wpl-tilt">
-        <g className="wpl-breathe">
-          <path d="M 128 505 L 286 505 L 294 640 L 120 640 Z" fill={ink} />
-          <path d="M 206 548 L 208 640" stroke={paper} strokeWidth={3} />
-
-          <path d="M 184 158 L 184 226 L 222 226 L 222 158 Z" fill={paper} stroke={ink} strokeWidth={4} />
-          <clipPath id={shirtId}>
-            <path d={torso} />
-          </clipPath>
-          <path d={torso} fill={ink} />
-          <g clipPath={"url(#" + shirtId + ")"} fill={paper} opacity={0.8}>
-            {specks.map(([x, y, r], k) => (
-              <circle key={k} cx={x} cy={y} r={r} />
-            ))}
-          </g>
-          <path d="M 178 216 L 203 262 L 228 216 Z" fill={paper} />
-          <path d="M 168 218 L 180 252 L 200 267 M 238 218 L 226 252 L 206 267" fill="none" stroke={paper} strokeWidth={3} strokeLinejoin="round" />
-          <path d="M 203 280 L 203 505" stroke={paper} strokeWidth={6} strokeLinecap="round" strokeDasharray="0 36" />
-          <path d="M 122 512 C 160 518 250 518 288 512" fill="none" stroke={paper} strokeWidth={3} />
-
-          {/* his right arm, folded across the waist */}
-          {limb("M 118 384 C 140 410 168 428 194 438", 30)}
-          <circle cx={204} cy={440} r={24} fill={ink} />
-          <circle cx={204} cy={440} r={20} fill={paper} />
-          <path d="M 206 426 C 214 430 218 438 216 448 M 196 446 C 202 452 210 454 216 450" fill="none" stroke={ink} strokeWidth={3} strokeLinecap="round" />
-          <path d="M 124 250 C 110 300 106 345 112 382" fill="none" stroke={ink} strokeWidth={50} strokeLinecap="round" />
-          <path d="M 144 282 C 136 320 134 350 138 376" fill="none" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
-          <path d="M 90 380 C 102 394 126 396 140 386" fill="none" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
-
-          {/* the waving arm */}
-          <g className="wpl-uarm">
-            <g className="wpl-farm">
-              {limb("M 350 350 L 392 214", 30)}
-              <path d="M 381 252 L 387 233" stroke={ink} strokeWidth={40} />
-              <circle cx={384} cy={243} r={8} fill={paper} stroke={ink} strokeWidth={3} />
-              <g className="wpl-hand">
-                <ellipse cx={400} cy={180} rx={31} ry={35} fill={ink} transform="rotate(12 400 180)" />
-                {fingers.map((d) => (
-                  <path key={"o" + d} d={d} stroke={ink} strokeWidth={24} strokeLinecap="round" />
-                ))}
-                <ellipse cx={400} cy={180} rx={27} ry={31} fill={paper} transform="rotate(12 400 180)" />
-                {fingers.map((d) => (
-                  <path key={"f" + d} d={d} stroke={paper} strokeWidth={16} strokeLinecap="round" />
-                ))}
-                <path d="M 392 196 C 400 202 410 200 416 192 M 394 150 L 394 164 M 405 148 L 405 162" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
-              </g>
+    <g transform="translate(-30 0)">
+      <g className="wpl-rise">
+        <g className="wpl-tilt">
+          <g className="wpl-breathe">
+            {/* legs: wide trousers, mid-stride */}
+            <g className="wpl-legA">
+              <path d="M 208 330 L 256 330 C 258 400 250 480 238 556 L 148 546 C 168 480 196 400 208 330 Z" fill={paper} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+              <path d="M 176 505 C 196 512 214 510 228 502" fill="none" stroke={ink} strokeWidth={3} strokeLinecap="round" />
+              <path d="M 146 540 L 242 552 L 246 592 L 128 594 C 120 572 130 552 146 540 Z" fill={ink} />
+              <path d="M 168 548 L 178 562 M 184 550 L 192 564 M 130 586 L 244 586" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
+              <circle cx={232} cy={575} r={3.5} fill={paper} />
+              <circle cx={210} cy={578} r={3} fill={paper} />
             </g>
-            <path d="M 288 250 C 312 280 330 310 344 340" fill="none" stroke={ink} strokeWidth={50} strokeLinecap="round" />
-            <path d="M 282 294 C 296 316 306 334 314 350" fill="none" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
-            <path d="M 318 344 Q 342 356 364 324" fill="none" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
-          </g>
+            <g className="wpl-legB">
+              <path d="M 244 330 L 276 330 C 310 400 350 470 374 548 L 300 566 C 280 490 256 420 244 330 Z" fill={paper} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+              <path d="M 318 482 C 332 492 346 494 358 490" fill="none" stroke={ink} strokeWidth={3} strokeLinecap="round" />
+              <path d="M 296 556 L 372 542 C 392 556 398 580 390 594 L 292 596 Z" fill={ink} />
+              <path d="M 340 546 L 350 560 M 356 544 L 364 558 M 294 588 L 392 588" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
+              <circle cx={312} cy={576} r={3.5} fill={paper} />
+            </g>
 
-          <g className="wpl-head" ref={headRef}>
-            <g className="wpl-look">
-              <ellipse cx={158} cy={118} rx={12} ry={18} fill={paper} stroke={ink} strokeWidth={4} />
-              <path d="M 156 110 C 162 112 162 124 156 126" fill="none" stroke={ink} strokeWidth={2.5} />
-              <path
-                d="M 160 92 C 158 142 172 180 206 184 C 240 182 258 150 258 100 C 258 64 236 46 208 46 C 180 46 162 64 160 92 Z"
-                fill={paper}
-                stroke={ink}
-                strokeWidth={4}
-              />
-              <path
-                d="M 154 108 C 146 70 156 30 196 18 C 232 8 276 16 284 44 C 288 60 278 72 264 72 C 250 62 226 60 206 66 C 186 72 172 86 168 110 Z"
-                fill={ink}
-              />
-              <path d="M 160 94 L 166 126 L 173 104 Z" fill={ink} />
-              <path d="M 196 30 C 220 22 250 24 266 38 M 190 44 C 210 36 236 38 250 46" fill="none" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
-              <g className="wpl-brows">
-                <path d="M 176 88 C 184 84 194 84 202 87 M 218 87 C 226 84 238 84 246 88" fill="none" stroke={ink} strokeWidth={4.5} strokeLinecap="round" />
-              </g>
-              <g className="wpl-eyes">
-                <g className="wpl-pupils">
-                  <circle cx={189} cy={110} r={4.4} fill={ink} />
-                  <circle cx={232} cy={110} r={4.4} fill={ink} />
+            {/* plaid top */}
+            <clipPath id={ids[0]}><path d={topP} /></clipPath>
+            <path d={topP} fill={paper} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+            <path d={grid(206, 272, 205, 335, 15, 22)} clipPath={"url(#" + ids[0] + ")"} stroke={ink} strokeWidth={2.5} fill="none" />
+            {/* belt */}
+            <path d="M 209 322 L 273 322 L 273 338 L 209 338 Z" fill={ink} />
+            <circle cx={241} cy={330} r={6} fill={paper} stroke={ink} strokeWidth={2} />
+
+            {/* jacket, open, in the accent colour */}
+            <clipPath id={ids[1]}><path d={jacketL} /></clipPath>
+            <clipPath id={ids[2]}><path d={jacketR} /></clipPath>
+            <path d={jacketL} fill={accent} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+            <path d={grid(130, 224, 270, 430, 20, 26)} clipPath={"url(#" + ids[1] + ")"} stroke={ink} strokeWidth={2.5} fill="none" />
+            <path d={jacketR} fill={accent} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+            <path d={grid(250, 336, 270, 420, 20, 26)} clipPath={"url(#" + ids[2] + ")"} stroke={ink} strokeWidth={2.5} fill="none" />
+            <circle cx={226} cy={262} r={3.5} fill={paper} stroke={ink} strokeWidth={2} />
+            <circle cx={224} cy={300} r={3.5} fill={paper} stroke={ink} strokeWidth={2} />
+            {/* collar */}
+            <path d="M 204 200 L 190 236 L 222 222 Z M 266 204 L 284 240 L 250 224 Z" fill={accent} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+
+            {/* the arm in the pocket */}
+            {limb("M 306 234 C 352 264 366 330 326 388", 50, accent)}
+            <path d="M 334 262 C 350 290 350 320 340 346" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
+            <ellipse cx={316} cy={396} rx={18} ry={11} fill={paper} stroke={ink} strokeWidth={3.5} transform="rotate(-20 316 396)" />
+            <path d="M 300 392 C 310 388 322 388 332 394" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
+
+            {/* the selfie arm */}
+            <g className="wpl-uarm">
+              <g className="wpl-farm">
+                {limb("M 112 292 L 106 206", 36, accent)}
+                <path d="M 88 204 L 126 208 L 126 226 L 88 222 Z" fill={paper} stroke={ink} strokeWidth={3.5} strokeLinejoin="round" />
+                <path d="M 98 204 L 98 223 M 108 205 L 108 224 M 118 207 L 118 225 M 88 213 L 126 217" stroke={ink} strokeWidth={2} />
+                <g className="wpl-hand">
+                  <g transform="translate(-8 26) rotate(14 150 110)">
+                    <rect x={130} y={66} width={42} height={76} rx={9} fill={paper} stroke={ink} strokeWidth={4} />
+                    <circle cx={142} cy={80} r={5} fill="none" stroke={ink} strokeWidth={3} />
+                    <circle className="wpl-flash" cx={142} cy={80} r={22} fill={accent} />
+                  </g>
+                  <ellipse cx={116} cy={176} rx={21} ry={26} fill={paper} stroke={ink} strokeWidth={4} transform="rotate(8 116 176)" />
+                  <path d="M 126 158 C 138 152 150 156 148 166 M 128 172 C 140 166 152 172 148 180 M 126 188 C 136 184 146 188 142 196" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
+                  <path d="M 112 156 C 108 164 108 170 112 176" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
                 </g>
+                              </g>
+              {limb("M 205 242 C 168 248 138 268 116 292", 56, accent)}
+              <path d="M 176 262 C 160 272 148 282 140 296" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
+            </g>
+
+            {/* neck + head */}
+            <path d="M 224 160 L 224 208 L 252 208 L 252 160 Z" fill={paper} stroke={ink} strokeWidth={4} />
+            <g className="wpl-head" ref={headRef}>
+              <g className="wpl-look">
+                <g className="wpl-hair">
+                  {curls.map(([x, y, r], i) => (
+                    <circle key={i} cx={x} cy={y} r={r} fill={ink} />
+                  ))}
+                  <path d="M 184 150 C 176 160 178 172 188 176 M 200 205 C 192 212 194 224 204 226 M 296 140 C 306 150 306 164 298 170 M 290 195 C 300 204 298 216 288 220" fill="none" stroke={paper} strokeWidth={2.5} strokeLinecap="round" />
+                </g>
+                <ellipse cx={274} cy={128} rx={7} ry={11} fill={paper} stroke={ink} strokeWidth={3.5} />
+                <path d="M 200 125 C 200 92 218 82 236 82 C 258 82 274 98 272 128 C 270 154 254 170 236 170 C 216 170 200 152 200 125 Z" fill={paper} stroke={ink} strokeWidth={4} />
+                {/* cap */}
+                <path d="M 198 98 C 196 56 226 44 244 46 C 270 48 282 76 280 100 C 250 92 222 92 198 98 Z" fill={accent} stroke={ink} strokeWidth={4} strokeLinejoin="round" />
+                <path d="M 200 98 C 182 90 160 94 148 106 C 168 114 192 112 212 106 Z" fill={ink} />
+                <path d="M 240 48 C 236 68 236 84 238 94" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
+                <circle cx={244} cy={45} r={4} fill={ink} />
+                <g className="wpl-brows">
+                  <path d="M 212 108 C 218 104 226 104 232 107 M 246 106 C 252 103 260 104 265 108" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
+                </g>
+                <g className="wpl-eyes">
+                  <g className="wpl-pupils">
+                  <circle cx={222} cy={122} r={4.4} fill={ink} />
+                  <circle cx={252} cy={120} r={4.4} fill={ink} />
+                  </g>
+                </g>
+                <path className="wpl-happy" d="M 215 124 Q 222 114 229 124 M 245 122 Q 252 112 259 122" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
+                <path d="M 238 128 C 233 136 237 139 242 138" fill="none" stroke={ink} strokeWidth={3} strokeLinecap="round" />
+                <path className="wpl-smile" d="M 222 146 C 232 158 250 156 260 142" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
+                <path className="wpl-grin" d="M 221 144 C 232 168 252 164 261 140 Z" fill={ink} stroke={ink} strokeWidth={3} strokeLinejoin="round" />
               </g>
-              <path className="wpl-happy" d="M 182 113 Q 189 104 196 113 M 225 113 Q 232 104 239 113" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
-              <path d="M 172 102 L 160 100 M 206 105 C 209 101 211 101 214 105" fill="none" stroke={ink} strokeWidth={4} strokeLinecap="round" />
-              <rect x={172} y={96} width={34} height={26} rx={5} fill="none" stroke={ink} strokeWidth={4.5} />
-              <rect x={214} y={96} width={36} height={26} rx={5} fill="none" stroke={ink} strokeWidth={4.5} />
-              <path d="M 214 118 C 211 132 206 142 214 146 C 219 148 224 146 226 143" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
-              <path className="wpl-smile" d="M 196 158 C 206 166 222 166 234 156" fill="none" stroke={ink} strokeWidth={3.5} strokeLinecap="round" />
-              <path className="wpl-grin" d="M 195 156 C 206 174 226 172 236 154 Z" fill={ink} stroke={ink} strokeWidth={3} strokeLinejoin="round" />
-              <path d="M 238 150 C 241 153 241 157 239 160" fill="none" stroke={ink} strokeWidth={2.5} strokeLinecap="round" />
             </g>
           </g>
         </g>
@@ -937,19 +964,24 @@ const WPL_CSS = `
 .wpl-cell{cursor:crosshair}
 .wpl-char{cursor:pointer;outline:none}
 .wpl-char:focus-visible .wpl-head{filter:drop-shadow(0 0 6px var(--wpl-accent))}
-.wpl-tilt{transform-box:view-box;transform-origin:205px 600px;transform:rotate(-7deg)}
-.wpl-breathe{transform-box:view-box;transform-origin:205px 600px;animation:wpl-breathe 3.8s ease-in-out infinite}
-.wpl-uarm{transform-box:view-box;transform-origin:288px 248px}
-.wpl-farm{transform-box:view-box;transform-origin:348px 346px}
-.wpl-hand{transform-box:view-box;transform-origin:392px 216px}
-.wpl-head{transform-box:view-box;transform-origin:203px 200px;transform:rotate(-4deg)}
-.wpl-look{transform-box:view-box;transform-origin:203px 200px;transform:rotate(calc(var(--wpl-hr,0) * 1deg));transition:transform .4s ease-out}
+.wpl-tilt{transform-box:view-box;transform-origin:205px 600px;transform:rotate(-2deg)}
+.wpl-breathe{transform-box:view-box;transform-origin:205px 600px;animation:wpl-bob 1.2s ease-in-out infinite}
+.wpl-legA{animation:wpl-stepA 1.2s ease-in-out infinite}
+.wpl-legB{animation:wpl-stepB 1.2s ease-in-out infinite}
+.wpl-uarm{transform-box:view-box;transform-origin:205px 238px}
+.wpl-legA,.wpl-legB{transform-box:view-box;transform-origin:236px 335px}
+.wpl-hair{transform-box:view-box;transform-origin:240px 110px;animation:wpl-hairb 1.2s ease-in-out infinite}
+.wpl-flash{opacity:0}
+.wpl-farm{transform-box:view-box;transform-origin:112px 292px}
+.wpl-hand{transform-box:view-box;transform-origin:106px 196px}
+.wpl-head{transform-box:view-box;transform-origin:236px 190px;transform:rotate(-4deg)}
+.wpl-look{transform-box:view-box;transform-origin:236px 190px;transform:rotate(calc(var(--wpl-hr,0) * 1deg));transition:transform .4s ease-out}
 .wpl-pupils{transform:translate(calc(var(--wpl-ex,0) * 1px),calc(var(--wpl-ey,0) * 1px));transition:transform .2s ease-out}
 .wpl-eyes{transform-box:fill-box;transform-origin:center;animation:wpl-blink 5.2s 7.5s infinite}
 .wpl-brows{transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
 .wpl-happy,.wpl-grin{opacity:0}
 .wpl-bubble{transform-box:fill-box;transform-origin:0% 100%;animation:wpl-pop .45s cubic-bezier(.3,1.6,.5,1) both}
-.wpl-root[data-intro="done"] .wpl-hand{animation:wpl-wiggle 6.5s 1.5s infinite}
+.wpl-root[data-intro="done"] .wpl-farm{animation:wpl-sway 2.4s ease-in-out infinite}
 
 .wpl-root[data-intro="on"] .wpl-poster{animation:wpl-thump .5s 2.5s both}
 .wpl-root[data-intro="on"] .wpl-draw{animation:wpl-draw .9s cubic-bezier(.6,0,.2,1) both}
@@ -965,6 +997,7 @@ const WPL_CSS = `
 
 .wpl-char.is-waving .wpl-farm{animation:wpl-wave 1.5s ease-in-out}
 .wpl-char.is-waving .wpl-hand{animation:wpl-hand 1.5s ease-in-out}
+.wpl-char.is-waving .wpl-flash{animation:wpl-flashy 1.5s ease-out}
 .wpl-char.is-waving .wpl-head{animation:wpl-nod 1.5s ease-in-out}
 .wpl-char.is-waving .wpl-brows{transform:translateY(-6px)}
 .wpl-char.is-waving .wpl-eyes,.wpl-char.is-waving .wpl-smile{opacity:0}
@@ -1007,15 +1040,20 @@ const WPL_CSS = `
 @keyframes wpl-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @keyframes wpl-dot{from{transform:scale(0)}to{transform:scale(1)}}
 @keyframes wpl-rise{from{transform:translateY(640px)}to{transform:translateY(0px)}}
-@keyframes wpl-tilt{from{transform:rotate(0deg)}to{transform:rotate(-7deg)}}
-@keyframes wpl-uarm{from{transform:rotate(26deg)}to{transform:rotate(0deg)}}
-@keyframes wpl-farm{from{transform:rotate(150deg)}to{transform:rotate(0deg)}}
+@keyframes wpl-tilt{from{transform:rotate(0deg)}to{transform:rotate(-2deg)}}
+@keyframes wpl-uarm{from{transform:rotate(-30deg)}to{transform:rotate(0deg)}}
+@keyframes wpl-farm{from{transform:rotate(70deg)}to{transform:rotate(0deg)}}
 @keyframes wpl-headin{0%{transform:rotate(9deg)}55%{transform:rotate(-8deg)}100%{transform:rotate(-4deg)}}
 @keyframes wpl-wave{0%{transform:rotate(0deg)}15%{transform:rotate(-17deg)}32%{transform:rotate(12deg)}50%{transform:rotate(-17deg)}68%{transform:rotate(12deg)}84%{transform:rotate(-7deg)}100%{transform:rotate(0deg)}}
 @keyframes wpl-hand{0%{transform:rotate(0deg)}15%{transform:rotate(-10deg)}32%{transform:rotate(10deg)}50%{transform:rotate(-10deg)}68%{transform:rotate(10deg)}84%{transform:rotate(-5deg)}100%{transform:rotate(0deg)}}
 @keyframes wpl-nod{0%{transform:rotate(-4deg)}25%{transform:rotate(-9deg)}55%{transform:rotate(-1deg)}80%{transform:rotate(-6deg)}100%{transform:rotate(-4deg)}}
 @keyframes wpl-wiggle{0%,86%,100%{transform:rotate(0deg)}90%{transform:rotate(-9deg)}94%{transform:rotate(7deg)}97%{transform:rotate(-3deg)}}
-@keyframes wpl-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.008,1.012)}}
+@keyframes wpl-bob{0%,50%,100%{transform:translateY(0)}25%,75%{transform:translateY(-6px)}}
+@keyframes wpl-stepA{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-5deg)}}
+@keyframes wpl-stepB{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes wpl-hairb{0%,50%,100%{transform:rotate(0deg)}25%,75%{transform:rotate(3deg) translateY(2px)}}
+@keyframes wpl-sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes wpl-flashy{0%,40%{opacity:0}45%{opacity:.95}100%{opacity:0}}
 @keyframes wpl-blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
 @keyframes wpl-pop{from{transform:scale(0) rotate(-8deg);opacity:0}to{transform:scale(1) rotate(0deg);opacity:1}}
 @keyframes wpl-corner-l{from{transform:translate(-70%,-70%)}to{transform:translate(0,0)}}

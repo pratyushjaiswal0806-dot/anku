@@ -246,23 +246,50 @@ function initSign() {
   let angle = 0;
   let vel = 0;
   let lastX = null;
+  let isTicking = false;
+
+  const tickPhysics = () => {
+    vel += -angle * 0.012; // spring back to rest
+    vel *= 0.965; // air resistance
+    angle += vel;
+    if (Math.abs(angle) > 0.005 || Math.abs(vel) > 0.005) {
+      gsap.set(wrap, { rotation: angle });
+    } else {
+      angle = 0;
+      vel = 0;
+      gsap.set(wrap, { rotation: 0 });
+      gsap.ticker.remove(tickPhysics);
+      isTicking = false;
+    }
+  };
+
+  const wake = () => {
+    if (!isTicking) {
+      isTicking = true;
+      gsap.ticker.add(tickPhysics);
+    }
+  };
 
   if (!reduceMotion) {
-    gsap.ticker.add(() => {
-      vel += -angle * 0.012; // spring back to rest
-      vel *= 0.965; // air resistance
-      angle += vel;
-      if (Math.abs(angle) > 0.01 || Math.abs(vel) > 0.01) gsap.set(wrap, { rotation: angle });
-    });
+    wake();
     $('.contact').addEventListener('mousemove', (e) => {
-      if (lastX !== null) vel += gsap.utils.clamp(-0.6, 0.6, (e.clientX - lastX) * 0.012);
+      if (lastX !== null) {
+        vel += gsap.utils.clamp(-0.6, 0.6, (e.clientX - lastX) * 0.012);
+        wake();
+      }
       lastX = e.clientX;
-    });
+    }, { passive: true });
     ScrollTrigger.create({
       trigger: '.contact',
       start: 'top bottom',
       end: 'bottom top',
-      onUpdate: (self) => { vel += gsap.utils.clamp(-0.5, 0.5, self.getVelocity() / 9000); },
+      onUpdate: (self) => {
+        const v = self.getVelocity();
+        if (Math.abs(v) > 50) {
+          vel += gsap.utils.clamp(-0.5, 0.5, v / 9000);
+          wake();
+        }
+      },
     });
   }
 
@@ -270,6 +297,7 @@ function initSign() {
     const email = sign.dataset.email;
     try { await navigator.clipboard.writeText(email); } catch { location.href = `mailto:${email}`; return; }
     vel += 2.4;
+    wake();
     gsap.timeline()
       .fromTo('.sign__stamp', { scale: 2.4, rotate: -40, opacity: 0 }, { scale: 1, rotate: -12, opacity: 1, duration: 0.5, ease: 'back.out(2.2)' })
       .to('.sign__stamp', { opacity: 0, scale: 0.8, duration: 0.5, ease: 'power2.in' }, '+=1.6');

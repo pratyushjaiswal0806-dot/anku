@@ -17,7 +17,7 @@ function setLiftSign(label, floor = '') {
 }
 
 /** Doors closed → open. Used on arrival and by the home loader. */
-export function openLift({ delay = 0.15 } = {}) {
+export function openLift({ delay = 0.05 } = {}) {
   const [l, r] = doors();
   const html = document.documentElement;
   try { sessionStorage.removeItem('as-nav'); } catch {}
@@ -28,10 +28,10 @@ export function openLift({ delay = 0.15 } = {}) {
   html.classList.remove('is-arriving', 'lift-closed');
   return new Promise((resolve) => {
     gsap.timeline({ delay, onComplete: resolve })
-      .to('.lift__sign', { yPercent: -260, duration: 0.7, ease: 'expo.in' }, 0.25)
-      .to(l, { xPercent: -101, duration: reduceMotion ? 0.01 : 1.15, ease: 'expo.inOut' }, 0.15)
-      .to(r, { xPercent: 101, duration: reduceMotion ? 0.01 : 1.15, ease: 'expo.inOut' }, 0.15)
-      .to('.lift__hint', { opacity: 0, duration: 0.3 }, 0);
+      .to('.lift__sign', { yPercent: -260, duration: 0.45, ease: 'expo.in' }, 0.1)
+      .to(l, { xPercent: -101, duration: reduceMotion ? 0.01 : 0.65, ease: 'expo.inOut' }, 0.05)
+      .to(r, { xPercent: 101, duration: reduceMotion ? 0.01 : 0.65, ease: 'expo.inOut' }, 0.05)
+      .to('.lift__hint', { opacity: 0, duration: 0.2 }, 0);
   });
 }
 
@@ -42,9 +42,9 @@ export function closeLift(label = '') {
   gsap.set('.lift__sign', { xPercent: -50, x: 0, left: '50%' });
   return new Promise((resolve) => {
     gsap.timeline({ onComplete: resolve })
-      .fromTo(l, { x: 0, xPercent: -101 }, { xPercent: 0, duration: reduceMotion ? 0.01 : 0.9, ease: 'expo.inOut' }, 0)
-      .fromTo(r, { x: 0, xPercent: 101 }, { xPercent: 0, duration: reduceMotion ? 0.01 : 0.9, ease: 'expo.inOut' }, 0)
-      .fromTo('.lift__sign', { y: 0, yPercent: -260 }, { yPercent: 0, duration: 0.6, ease: 'expo.out' }, 0.45);
+      .fromTo(l, { x: 0, xPercent: -101 }, { xPercent: 0, duration: reduceMotion ? 0.01 : 0.55, ease: 'expo.inOut' }, 0)
+      .fromTo(r, { x: 0, xPercent: 101 }, { xPercent: 0, duration: reduceMotion ? 0.01 : 0.55, ease: 'expo.inOut' }, 0)
+      .fromTo('.lift__sign', { y: 0, yPercent: -260 }, { yPercent: 0, duration: 0.4, ease: 'expo.out' }, 0.25);
   });
 }
 
@@ -55,6 +55,24 @@ export function initTransitions() {
     try { label = sessionStorage.getItem('as-nav') || ''; } catch {}
     setLiftSign(label && label !== '1' ? label : 'arriving', '●');
   }
+
+  // Prefetch internal pages on hover for instant navigation
+  const prefetched = new Set();
+  document.addEventListener('mouseover', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    try {
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin || prefetched.has(url.pathname)) return;
+      prefetched.add(url.pathname);
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url.pathname;
+      document.head.appendChild(link);
+    } catch {}
+  }, { passive: true });
 
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href]');
@@ -91,20 +109,32 @@ export function initTransitions() {
 export function initHeader() {
   const header = $('.site-header');
   if (!header) return;
+  let isDark = false;
   const darkTriggers = $$('[data-theme="dark"]').map((el) =>
     ScrollTrigger.create({
       trigger: el,
       start: 'top top+=42',
       end: 'bottom top+=42',
-      onToggle: () => header.classList.toggle('is-dark', darkTriggers.some((t) => t.isActive)),
+      onToggle: () => {
+        const nextDark = darkTriggers.some((t) => t.isActive);
+        if (nextDark !== isDark) {
+          isDark = nextDark;
+          header.classList.toggle('is-dark', isDark);
+        }
+      },
     })
   );
+  let isHidden = false;
   ScrollTrigger.create({
     start: 0,
     end: 'max',
     onUpdate: (self) => {
       const y = self.scroll();
-      header.classList.toggle('is-hidden', self.direction === 1 && y > 300);
+      const nextHidden = self.direction === 1 && y > 300;
+      if (nextHidden !== isHidden) {
+        isHidden = nextHidden;
+        header.classList.toggle('is-hidden', isHidden);
+      }
     },
   });
 
@@ -115,6 +145,7 @@ export function initHeader() {
   const page = document.body.dataset.page;
   if (page === 'work' || page === 'case') $$('.nav a[data-section="work"]').forEach((a) => a.classList.add('is-active'));
   if (page === 'about') $$('.nav a[href="/about.html"]').forEach((a) => a.classList.add('is-active'));
+  if (page === 'contact') $$('.nav a[href="/contact.html"]').forEach((a) => a.classList.add('is-active'));
 
   // active nav pill follows the section in view (home only — other pages keep their fixed state)
   if (page !== 'home') {
@@ -186,6 +217,9 @@ export function initMobileNav() {
   }
   if (page === 'about') {
     $$('.mobile-drawer__link[href="/about.html"]').forEach((a) => a.classList.add('is-active'));
+  }
+  if (page === 'contact') {
+    $$('.mobile-drawer__link[href="/contact.html"]').forEach((a) => a.classList.add('is-active'));
   }
 }
 

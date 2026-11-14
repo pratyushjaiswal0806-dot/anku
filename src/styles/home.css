@@ -151,6 +151,7 @@ a.brand__tile:focus-visible { outline: 2px solid var(--blush); outline-offset: 3
 /* paper grain, as on the old folders */
 .service::after {
   content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; mix-blend-mode: multiply; opacity: 0.3;
+  transform: translateZ(0);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.45 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .service--olive { --c: var(--olive); }

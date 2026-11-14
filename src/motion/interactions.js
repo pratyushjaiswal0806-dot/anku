@@ -44,12 +44,20 @@ export function initMagnetic(scope = document) {
     const strength = parseFloat(el.dataset.magnetic) || 0.32;
     const xTo = gsap.quickTo(el, 'x', { duration: 0.9, ease: 'elastic.out(1, 0.4)' });
     const yTo = gsap.quickTo(el, 'y', { duration: 0.9, ease: 'elastic.out(1, 0.4)' });
+    let r = null;
+    el.addEventListener('mouseenter', () => {
+      r = el.getBoundingClientRect();
+    }, { passive: true });
     el.addEventListener('mousemove', (e) => {
-      const r = el.getBoundingClientRect();
+      if (!r) r = el.getBoundingClientRect();
       xTo((e.clientX - r.left - r.width / 2) * strength);
       yTo((e.clientY - r.top - r.height / 2) * strength);
+    }, { passive: true });
+    el.addEventListener('mouseleave', () => {
+      r = null;
+      xTo(0);
+      yTo(0);
     });
-    el.addEventListener('mouseleave', () => { xTo(0); yTo(0); });
   });
 }
 
@@ -59,13 +67,21 @@ export function scramble(el, final = el.dataset.text || el.textContent, speed = 
   el.dataset.text = final;
   cancelAnimationFrame(el._raf);
   let frame = 0;
+  const len = final.length;
   const run = () => {
-    const done = frame / speed;
-    el.textContent = [...final]
-      .map((ch, i) => (i < done || ch === ' ' ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0]))
-      .join('');
+    const done = Math.floor(frame / speed);
+    let out = '';
+    for (let i = 0; i < len; i++) {
+      const ch = final[i];
+      if (i < done || ch === ' ') {
+        out += ch;
+      } else {
+        out += GLYPHS[(Math.random() * GLYPHS.length) | 0];
+      }
+    }
+    el.textContent = out;
     frame++;
-    if (done < final.length) el._raf = requestAnimationFrame(run);
+    if (done < len) el._raf = requestAnimationFrame(run);
     else el.textContent = final;
   };
   run();

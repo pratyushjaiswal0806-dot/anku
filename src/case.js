@@ -75,7 +75,7 @@ export function render() {
 
   /* ── hero ── */
   const cover = c.cover
-    ? `<img src="${c.cover}" alt="${c.brand} campaign" class="${c.coverFit === 'contain' ? 'is-contain' : ''}" />`
+    ? `<img src="${c.cover}" alt="${c.brand} campaign" fetchpriority="high" decoding="async" class="${c.coverFit === 'contain' ? 'is-contain' : ''}" />`
     : `<span class="case-hero__type"><span>${c.brand}</span></span>`;
 
   const facts = [
@@ -145,7 +145,7 @@ export function render() {
                 const tag = g.href ? 'a' : 'figure';
                 const attrs = g.href ? `href="${g.href}" target="_blank" rel="noopener" data-cursor="view"` : '';
                 return `<${tag} class="gallery__item" ${attrs}>
-                  <div class="gallery__img"><img src="${g.src}" alt="${g.caption}" loading="lazy" /></div>
+                  <div class="gallery__img"><img src="${g.src}" alt="${g.caption}" loading="lazy" decoding="async" /></div>
                   <div class="gallery__cap"><i>${pad(i + 1)}</i><span>${g.caption}</span>${g.href ? '<b>↗</b>' : ''}</div>
                 </${tag}>`;
               })

@@ -14,19 +14,46 @@ export let lenis = null;
 
 export function initScroll() {
   if (reduceMotion) return null;
-  lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.95, smoothWheel: true });
+  lenis = new Lenis({
+    lerp: 0.105,
+    wheelMultiplier: 1.0,
+    smoothWheel: true,
+    touchMultiplier: 1.2,
+  });
   lenis.on('scroll', ScrollTrigger.update);
+
+  let scrollTimer = null;
+  lenis.on('scroll', () => {
+    if (!document.body.classList.contains('is-scrolling')) {
+      document.body.classList.add('is-scrolling');
+    }
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      document.body.classList.remove('is-scrolling');
+    }, 120);
+  });
+
   gsap.ticker.add((t) => lenis.raf(t * 1000));
-  gsap.ticker.lagSmoothing(0);
+  gsap.ticker.lagSmoothing(500, 33);
   return lenis;
 }
 
 export function scrollToTarget(target, opts = {}) {
   const el = typeof target === 'string' ? (target === '#' || target === '#top' ? 0 : $(target)) : target;
   if (el == null) return;
-  if (lenis) lenis.scrollTo(el, { duration: 1.8, easing: (t) => 1 - Math.pow(1 - t, 4), ...opts });
-  else if (el === 0) window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
-  else el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+  const defaultOffset = -72;
+  if (lenis) {
+    lenis.scrollTo(el, {
+      duration: 1.1,
+      offset: defaultOffset,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
+      ...opts,
+    });
+  } else if (el === 0) {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  } else {
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
 }
 
 export function stopScroll() { lenis?.stop(); document.body.classList.add('is-loading'); }

@@ -9,10 +9,10 @@ export function mountPoster(el: HTMLElement) {
       name="Ankita Shah"
       year="2026"
       roles={['Brand Strategist', 'Marketing']}
-      lettersLeft={['BR', 'SH']}
+      lettersLeft={['ST', 'SM']}
       giantLetter="A"
-      lettersRight={['ND', 'H']}
-      title="Brand — Ankita Shah"
+      lettersRight={['RT', 'RT']}
+      title="Start Smart — Ankita Shah"
       signature="ANKITA/SHAH"
       greeting="Hi, I'm Ankita!"
       accent="#a3202a"

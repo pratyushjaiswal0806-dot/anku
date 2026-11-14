@@ -3,6 +3,7 @@ import './styles/home.css';
 import './styles/case.css';
 import './styles/about.css';
 import './styles/work.css';
+import './styles/contact.css';
 import './styles/doodles.css';
 
 import { ScrollTrigger, initScroll, scrollToTarget, reduceMotion, $ } from './motion/core.js';
@@ -23,6 +24,7 @@ async function boot() {
     page === 'case' ? await import('./case.js')
     : page === 'about' ? await import('./about.js')
     : page === 'work' ? await import('./work.js')
+    : page === 'contact' ? await import('./contact.js')
     : await import('./home.js');
   mod.render?.();
   doodles.render();
@@ -38,7 +40,7 @@ async function boot() {
   mod.animate?.();
   doodles.animate();
 
-  await document.fonts?.ready;
+  await Promise.race([document.fonts?.ready, new Promise((r) => setTimeout(r, 600))]);
   ScrollTrigger.refresh();
 
   if (location.hash) {

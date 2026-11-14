@@ -7,8 +7,11 @@
     <meta name="description" content="Ankita Shah helps brands grow through marketing people connect with. Brand strategy, social media, content direction and creator partnerships." />
     <meta name="theme-color" content="#5a1820" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href="/assets/img/portrait.webp" fetchpriority="high" />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&family=Nothing+You+Could+Do&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <script>try{var d=document.documentElement,s=sessionStorage;if(s.getItem('as-nav'))d.classList.add('is-arriving','no-loader');else if(s.getItem('as-seen'))d.classList.add('no-loader');else d.classList.add('lift-closed')}catch(e){}</script>
     <script type="module" src="/src/main.js"></script>
@@ -31,9 +34,9 @@
         <a href="#expertise">expertise</a>
         <a href="/work/" data-label="work" data-section="work">work</a>
         <a href="/about.html" data-label="about">about</a>
-        <a href="#contact">contact</a>
+        <a href="/contact.html" data-label="contact">contact</a>
       </nav>
-      <a href="#contact" class="status" data-magnetic><span class="status__dot"></span>open to new briefs</a>
+      <a href="/contact.html" class="status" data-magnetic data-label="contact"><span class="status__dot"></span>open to new briefs</a>
       <button class="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav">
         <span class="mobile-nav-toggle__bar"></span>
         <span class="mobile-nav-toggle__bar"></span>
@@ -47,10 +50,10 @@
           <a href="/#expertise" class="mobile-drawer__link" data-label="expertise"><i>02</i> expertise</a>
           <a href="/work/" class="mobile-drawer__link" data-label="work" data-section="work"><i>03</i> work</a>
           <a href="/about.html" class="mobile-drawer__link" data-label="about"><i>04</i> about</a>
-          <a href="/#contact" class="mobile-drawer__link" data-label="contact"><i>05</i> contact</a>
+          <a href="/contact.html" class="mobile-drawer__link" data-label="contact"><i>05</i> contact</a>
         </nav>
         <div class="mobile-drawer__foot">
-          <a href="/#contact" class="btn btn--wine mobile-drawer__cta" data-label="contact"><span>open to new briefs</span><i>↘</i></a>
+          <a href="/contact.html" class="btn btn--wine mobile-drawer__cta" data-label="contact"><span>open to new briefs</span><i>↘</i></a>
           <div class="mobile-drawer__meta">
             <a href="mailto:ankitashah.work@gmail.com" class="u-link">ankitashah.work@gmail.com</a>
             <span class="smallcaps">local time in india — <span class="clock">--:--</span></span>
@@ -105,7 +108,7 @@
                   <span class="tarot__frame">
                     <span class="tarot__num">XI</span>
                     <span class="tarot__sky" aria-hidden="true"><i>✦</i><i>☾</i><i>✦</i></span>
-                    <span class="tarot__arch"><img src="/assets/img/portrait.webp" alt="Ankita Shah in a park, smiling, holding a colouring book that says Keep Going" /></span>
+                    <span class="tarot__arch"><img src="/assets/img/portrait.webp" alt="Ankita Shah in a park, smiling, holding a colouring book that says Keep Going" width="864" height="1152" fetchpriority="high" decoding="async" /></span>
                     <span class="tarot__title">the strategist</span>
                   </span>
                 </span>
@@ -259,7 +262,10 @@
                 <li>your timeline and a rough budget</li>
                 <li>any links, decks or references</li>
               </ol>
-              <a class="btn btn--wine" href="mailto:ankitashah.work@gmail.com?subject=A%20new%20brief" data-magnetic><span>start an email</span><i>↗</i></a>
+              <div class="contact-card__actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a class="btn btn--wine" href="mailto:ankitashah.work@gmail.com?subject=A%20new%20brief" data-magnetic><span>start an email</span><i>↗</i></a>
+                <a class="btn btn--line" href="/contact.html" data-magnetic data-label="contact"><span>dispatch brief</span><i>↗</i></a>
+              </div>
             </article>
           </div>
 
@@ -282,7 +288,7 @@
             <li><a href="/#expertise"><i>02</i> expertise</a></li>
             <li><a href="/work/" data-label="work"><i>03</i> work</a></li>
             <li><a href="/about.html" data-label="about"><i>04</i> about</a></li>
-            <li><a href="/#contact"><i>05</i> contact</a></li>
+            <li><a href="/contact.html" data-label="contact"><i>05</i> contact</a></li>
           </ol>
         </div>
         <div class="footer__col">

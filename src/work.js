@@ -60,7 +60,7 @@ export function render() {
       <p class="script">liked what you saw?</p>
       <h2 class="h2">your brand could be <em>case file ${String(cases.length + 1).padStart(2, '0')}.</em></h2>
       <div class="work-cta__btns">
-        <a href="/#contact" class="btn btn--wine" data-magnetic data-label="contact"><span>start a conversation</span><i>↗</i></a>
+        <a href="/contact.html" class="btn btn--wine" data-magnetic data-label="contact"><span>start a conversation</span><i>↗</i></a>
         <a href="/about.html" class="btn btn--line" data-magnetic data-label="about"><span>more about me</span><i>↗</i></a>
       </div>
     </section>`;
