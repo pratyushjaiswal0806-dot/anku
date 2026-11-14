@@ -179,20 +179,20 @@ export type StickerKind = "burst" | "smiley" | "heart" | "bubble" | "daisy" | "c
 export type StickerSpec =
   | StickerKind
   | {
-    kind?: StickerKind
-    /** Your own sticker art (an <img>, an <svg>…). Replaces `kind`. */
-    node?: React.ReactNode
-    /** Accessible name, e.g. "Smiley sticker". */
-    label?: string
-    /** Text on the burst / bubble stickers. */
-    text?: string
-    /** Position in % of the wordmark box; omit to let it find a letter. */
-    x?: number
-    y?: number
-    /** Width in % of the wordmark box. */
-    size?: number
-    rotate?: number
-  }
+      kind?: StickerKind
+      /** Your own sticker art (an <img>, an <svg>…). Replaces `kind`. */
+      node?: React.ReactNode
+      /** Accessible name, e.g. "Smiley sticker". */
+      label?: string
+      /** Text on the burst / bubble stickers. */
+      text?: string
+      /** Position in % of the wordmark box; omit to let it find a letter. */
+      x?: number
+      y?: number
+      /** Width in % of the wordmark box. */
+      size?: number
+      rotate?: number
+    }
 
 export type SocialKind = "linkedin" | "instagram" | "tiktok" | "x" | "youtube" | "dribbble"
 export type Social = { kind: SocialKind; href: string; label?: string }
@@ -661,7 +661,7 @@ export default function StickerSlapFooter({
           }
         }
       }
-    } catch { }
+    } catch {}
     isHydrated.current = true
   }, [storageKey])
 
@@ -670,7 +670,7 @@ export default function StickerSlapFooter({
     if (!storageKey || !isHydrated.current || typeof window === "undefined") return
     try {
       localStorage.setItem(storageKey, JSON.stringify({ moved, order }))
-    } catch { }
+    } catch {}
   }, [moved, order, storageKey])
 
   const word = React.useMemo(() => layoutScript(wordmark), [wordmark])
@@ -762,7 +762,7 @@ export default function StickerSlapFooter({
     return () => {
       cancelAnimationFrame(raf)
       if (lenis?.off) {
-        try { lenis.off("scroll", onScroll) } catch { }
+        try { lenis.off("scroll", onScroll) } catch {}
       }
       window.removeEventListener("scroll", onScroll, { capture: true })
       window.removeEventListener("resize", onScroll)
@@ -889,7 +889,7 @@ export default function StickerSlapFooter({
     if (storageKey && typeof window !== "undefined") {
       try {
         localStorage.removeItem(storageKey)
-      } catch { }
+      } catch {}
     }
     setRun((r) => r + 1)
   }
@@ -1050,10 +1050,10 @@ export default function StickerSlapFooter({
             <button type="button" className="ssf-wm-btn" onClick={replay} aria-label={"Write " + wordmark + " again"}>
               <svg key={run} className="ssf-wm" viewBox={[vbX, vbY, vbW, vbH].map(round).join(" ")} aria-hidden="true" focusable="false">
                 <g transform={"skewX(-9)"}>
-                  <path d={word.main} data-draw="" style={{ "--dur": drawDur + "s", "--at": writeAt + "s" } as React.CSSProperties} />
-                  {word.extra.map((d, k) => (
-                    <path key={k} d={d} data-draw="" style={{ "--dur": ".28s", "--at": round(writeAt + drawDur + k * 0.16) + "s" } as React.CSSProperties} />
-                  ))}
+                <path d={word.main} data-draw="" style={{ "--dur": drawDur + "s", "--at": writeAt + "s" } as React.CSSProperties} />
+                {word.extra.map((d, k) => (
+                  <path key={k} d={d} data-draw="" style={{ "--dur": ".28s", "--at": round(writeAt + drawDur + k * 0.16) + "s" } as React.CSSProperties} />
+                ))}
                 </g>
               </svg>
             </button>

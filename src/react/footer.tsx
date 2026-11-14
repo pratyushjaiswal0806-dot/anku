@@ -7,7 +7,7 @@ export function mountFooter(el: HTMLElement) {
   if (footerRoot) {
     try {
       footerRoot.unmount();
-    } catch { }
+    } catch {}
     footerRoot = null;
   }
   footerRoot = createRoot(el);
