@@ -71,7 +71,24 @@
 .marquee__track { display: inline-flex; align-items: center; gap: 30px; white-space: nowrap; padding-right: 30px; will-change: transform; }
 .marquee__track span { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 3vw, 44px); letter-spacing: -0.04em; color: var(--wine); }
 .marquee__track span:nth-of-type(even) { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
-.marquee__track i { font-style: normal; color: var(--cherry); font-size: 18px; }
+.marquee__track i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cherry);
+  line-height: 0;
+  vertical-align: middle;
+  transition: transform 0.6s var(--ease);
+}
+.marquee__track i svg {
+  width: clamp(16px, 1.8vw, 24px);
+  height: clamp(16px, 1.8vw, 24px);
+  fill: currentColor;
+  display: block;
+}
+.marquee:hover .marquee__track i {
+  transform: rotate(90deg);
+}
 
 
 /* ═════════════════════════════════════════════

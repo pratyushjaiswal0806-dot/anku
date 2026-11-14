@@ -223,8 +223,15 @@ export function initMobileNav() {
   }
 }
 
-/* ───────── Footer: works index + back-to-top ───────── */
+/* ───────── Footer: sticker slap footer / works index + back-to-top ───────── */
 export function initFooter() {
+  const host = $('#site-footer');
+  if (host) {
+    import('../react/footer.tsx').then((m) => {
+      m.mountFooter(host);
+    });
+    return;
+  }
   const list = $('.footer__index--works');
   if (list) {
     list.innerHTML = cases

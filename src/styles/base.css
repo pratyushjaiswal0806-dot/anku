@@ -379,6 +379,17 @@ html.lift-closed .lift__sign, .is-arriving .lift__sign { transform: translate(-5
 /* ─────────────────────────────────────────────
    Footer
    ───────────────────────────────────────────── */
+.site-footer-root {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+body[data-page="home"] .site-footer-root { background: var(--sky); }
+body[data-page="about"] .site-footer-root { background: var(--cream); }
+body[data-page="work"] .site-footer-root { background: var(--blush-2); }
+body[data-page="case"] .site-footer-root { background: var(--sky); }
+body[data-page="contact"] .site-footer-root { background: var(--sky); }
 .footer { background: var(--wine-deep); color: var(--sky); padding: clamp(70px, 9vw, 120px) var(--pad) 28px; overflow: hidden; }
 .footer__grid { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 48px; }
 .footer__head { display: block; margin-bottom: 20px; color: var(--denim); }

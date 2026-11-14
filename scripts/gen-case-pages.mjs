@@ -73,34 +73,7 @@ const shell = ({ title, description, body, main }) => `<!doctype html>
 
     <main id="main">${main}</main>
 
-    <footer class="footer" data-theme="dark">
-      <div class="footer__grid">
-        <div class="footer__col">
-          <span class="smallcaps footer__head">index</span>
-          <ol class="footer__index">
-            <li><a href="/#brands" data-label="brands"><i>01</i> brands</a></li>
-            <li><a href="/#expertise" data-label="expertise"><i>02</i> expertise</a></li>
-            <li><a href="/work/" data-label="work"><i>03</i> work</a></li>
-            <li><a href="/about.html" data-label="about"><i>04</i> about</a></li>
-            <li><a href="/contact.html" data-label="contact"><i>05</i> contact</a></li>
-          </ol>
-        </div>
-        <div class="footer__col">
-          <span class="smallcaps footer__head">the case files</span>
-          <ol class="footer__index footer__index--works"></ol>
-        </div>
-        <div class="footer__col footer__col--right">
-          <span class="smallcaps footer__head">correspondence</span>
-          <a class="u-link footer__mail" href="mailto:ankitashah.work@gmail.com">ankitashah.work@gmail.com</a>
-          <!-- TODO: real profile / résumé URLs -->
-          <ul class="footer__social"><li><a href="#" target="_blank" rel="noopener" class="u-link">linkedin ↗</a></li><li><a href="#" target="_blank" rel="noopener" class="u-link">instagram ↗</a></li><li><a href="#" target="_blank" rel="noopener" class="u-link">résumé ↓</a></li></ul>
-          <p class="footer__clock smallcaps">local time in india — <span class="clock">--:--</span></p>
-          <button class="totop" type="button" data-magnetic data-cursor="up"><span class="totop__box">▲</span>going up</button>
-        </div>
-      </div>
-      <span class="footer__big">ankita <em>shah</em></span>
-      <div class="footer__base smallcaps"><span>© 2025 ankita shah</span><span>made with care, and a little chutzpah</span></div>
-    </footer>
+    <div id="site-footer" class="site-footer-root" data-theme="dark"></div>
   </body>
 </html>
 `;

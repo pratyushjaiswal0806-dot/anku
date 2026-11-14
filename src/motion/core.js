@@ -35,6 +35,10 @@ export function initScroll() {
 
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(500, 33);
+  if (typeof window !== 'undefined') {
+    window.__lenis = lenis;
+    window.ScrollTrigger = ScrollTrigger;
+  }
   return lenis;
 }
 
