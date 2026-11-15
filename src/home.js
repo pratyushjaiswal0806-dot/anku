@@ -205,7 +205,6 @@ export function animate() {
   const cChars = $$('.contact__line').flatMap((l) => splitChars(l));
   gsap.from(cChars, { yPercent: 120, duration: 1.2, ease: 'expo.out', stagger: 0.02, scrollTrigger: { trigger: '.contact', start: 'top 65%' } });
   gsap.from('.sign', { yPercent: -60, opacity: 0, duration: 1.4, ease: 'elastic.out(1, 0.45)', scrollTrigger: { trigger: '.contact', start: 'top 40%' } });
-  gsap.from('.contact__or', { y: 30, opacity: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '.sign-wrap', start: 'top 70%' } });
   rise('.contact-card', '.contact__cards', { y: 80, stagger: 0.12 });
   rise('.socials li', '.socials', { y: 30, stagger: 0.06 });
 }

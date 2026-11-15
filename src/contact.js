@@ -1,6 +1,6 @@
 import { gsap, ScrollTrigger, $, $$, reduceMotion } from './motion/core.js';
 import { isArriving, openLift } from './motion/chrome.js';
-import { toast, getVisitor } from './motion/interactions.js';
+import { toast } from './motion/interactions.js';
 
 export async function intro() {
   const p = isArriving() ? openLift() : Promise.resolve();
@@ -47,13 +47,6 @@ export function animate() {
 function initForm() {
   const form = $('#dispatch-form');
   if (!form) return;
-
-  // Pre-fill visitor name if known from previous greeting interaction
-  const visitor = getVisitor();
-  const nameInput = $('#sender-name');
-  if (visitor && nameInput && !nameInput.value) {
-    nameInput.value = visitor;
-  }
 
   // Interactive chip selector
   const chips = $$('.chip-toggle', form);

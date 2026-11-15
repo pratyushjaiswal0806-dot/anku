@@ -97,43 +97,12 @@ export function initScramble(scope = document) {
 
 /* ───────── Visitor name + greeting ───────── */
 export function getVisitor() {
-  try { return localStorage.getItem('as-name') || ''; } catch { return ''; }
-}
-
-function applyVisitor(name) {
-  $$('.visitor-name-inline').forEach((el) => {
-    el.textContent = name ? `dear ${name}` : 'dear reader';
-  });
+  return '';
 }
 
 export function initVisitor() {
-  const timeEl = $('.greeting__time');
-  if (timeEl) {
-    const h = new Date().getHours();
-    timeEl.textContent = h < 5 ? 'up late' : h < 12 ? 'good morning' : h < 17 ? 'good afternoon' : 'good evening';
-  }
-  const input = $('.greeting__input');
-  const greeting = $('.greeting');
-  const size = () => { input.style.width = `${Math.max(input.value.length, input.placeholder.length) + 1.5}ch`; };
-  const name = getVisitor();
-  applyVisitor(name);
-  if (!input) return;
-  if (name) { input.value = name; greeting.classList.add('is-named'); }
-  size();
-  input.addEventListener('input', size);
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') input.blur(); });
-  input.addEventListener('change', () => {
-    const v = input.value.trim().replace(/[^\p{L}\p{M}' .-]/gu, '').slice(0, 18);
-    input.value = v;
-    try { v ? localStorage.setItem('as-name', v) : localStorage.removeItem('as-name'); } catch {}
-    greeting.classList.toggle('is-named', !!v);
-    applyVisitor(v);
-    size();
-    if (v) {
-      toast(`<span>hello ${v}!</span> lovely to meet you`);
-      gsap.fromTo(input, { scale: 1.2 }, { scale: 1, duration: 0.8, ease: 'back.out(3)' });
-    }
-  });
+  // Clear any legacy test visitor name from storage
+  try { localStorage.removeItem('as-name'); } catch {}
 }
 
 /* ───────── Toast ───────── */
@@ -157,8 +126,7 @@ export function initDelights() {
   // Tab title when the reader wanders off
   const original = document.title;
   document.addEventListener('visibilitychange', () => {
-    const n = getVisitor();
-    document.title = document.hidden ? `come back${n ? `, ${n}` : ''} — your brand is calling ☎` : original;
+    document.title = document.hidden ? 'come back — your brand is calling ☎' : original;
   });
 
   // Easter egg: type "kathak" anywhere

@@ -179,20 +179,20 @@ export type StickerKind = "burst" | "smiley" | "heart" | "bubble" | "daisy" | "c
 export type StickerSpec =
   | StickerKind
   | {
-      kind?: StickerKind
-      /** Your own sticker art (an <img>, an <svg>…). Replaces `kind`. */
-      node?: React.ReactNode
-      /** Accessible name, e.g. "Smiley sticker". */
-      label?: string
-      /** Text on the burst / bubble stickers. */
-      text?: string
-      /** Position in % of the wordmark box; omit to let it find a letter. */
-      x?: number
-      y?: number
-      /** Width in % of the wordmark box. */
-      size?: number
-      rotate?: number
-    }
+    kind?: StickerKind
+    /** Your own sticker art (an <img>, an <svg>…). Replaces `kind`. */
+    node?: React.ReactNode
+    /** Accessible name, e.g. "Smiley sticker". */
+    label?: string
+    /** Text on the burst / bubble stickers. */
+    text?: string
+    /** Position in % of the wordmark box; omit to let it find a letter. */
+    x?: number
+    y?: number
+    /** Width in % of the wordmark box. */
+    size?: number
+    rotate?: number
+  }
 
 export type SocialKind = "linkedin" | "instagram" | "tiktok" | "x" | "youtube" | "dribbble"
 export type Social = { kind: SocialKind; href: string; label?: string }
@@ -394,7 +394,35 @@ const CSS =
   ".ssf-pop li+li{border-top:1.5px dashed color-mix(in oklab,var(--ssf-ink) 22%,transparent)}" +
   ".ssf-pop b{font-size:11px;font-weight:600;opacity:.6;text-transform:lowercase}" +
   ".ssf-pop strong{font-weight:800;letter-spacing:-.01em}" +
-  "@container (max-width: 760px){.ssf-cols{grid-template-columns:minmax(0,1fr)}.ssf-top{padding-bottom:24px}.ssf-stage{width:min(165%,calc(var(--ssf-wmh) * var(--ssf-ar)));max-width:none;margin-left:-6%}}" +
+  "@container (max-width: 760px){" +
+  ".ssf{padding:0 6px 14px !important;min-height:auto !important}" +
+  ".ssf-panel{border-radius:20px !important;padding-bottom:14px}" +
+  ".ssf-top{padding:10px 12px 14px}" +
+  ".ssf-nav{width:48px;height:36px;font-size:14px}" +
+  ".ssf-logo svg{height:20px}" +
+  ".ssf-chat{width:28px;height:28px}" +
+  ".ssf-cols{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:16px 14px !important;padding:16px 14px 10px !important}" +
+  ".ssf-col:nth-child(3){grid-column:1 / -1;border-top:1px dashed rgba(220,235,247,0.18);padding-top:14px;margin-top:2px}" +
+  ".ssf-tag{font-size:10px;padding:.2em .6em .25em;margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase}" +
+  ".ssf-big{font-size:clamp(14px,3.8cqw,16px);line-height:1.25}" +
+  ".ssf-map{margin-top:8px;font-size:12px}" +
+  ".ssf-note{margin-top:6px;font-size:11px;line-height:1.35;max-width:100%}" +
+  ".ssf-socials{margin-top:8px;gap:8px}" +
+  ".ssf-soc{width:32px;height:32px;border-radius:8px}" +
+  ".ssf-stage{width:100% !important;max-width:100% !important;margin:8px auto 0 !important;padding:0 8px !important;box-sizing:border-box !important;align-self:center !important}" +
+  ".ssf-stage-in{width:100%}" +
+  ".ssf-wm{width:100% !important;height:auto !important;max-height:clamp(75px,16svh,120px) !important;margin:0 auto;display:block}" +
+  ".ssf-st{width:clamp(34px,9.5cqw,46px) !important}" +
+  ".ssf-st-btn{min-width:38px;min-height:38px}" +
+  ".ssf-credits{position:static !important;display:flex;justify-content:center;padding:8px 0 2px !important;margin-top:4px}" +
+  ".ssf-pill{font-size:11px;padding:.22em .72em .26em}" +
+  ".ssf-pop{right:50% !important;transform:translateX(50%) !important;bottom:calc(100% + 6px) !important;width:min(280px,90cqw) !important}" +
+  "}" +
+  "@container (max-width: 380px){" +
+  ".ssf-cols{grid-template-columns:1fr !important;gap:14px !important;padding:12px 10px 8px !important}" +
+  ".ssf-col:nth-child(3){border-top:none;padding-top:0}" +
+  ".ssf-big{font-size:14.5px}" +
+  "}" +
   "@keyframes ssf-rewrite{0%{stroke-dashoffset:var(--l,120px)}100%{stroke-dashoffset:0}}" +
   "@keyframes ssf-popin{from{opacity:0;transform:translateY(10px) scale(.7) rotate(4deg)}}" +
   // the storyboard: everything above is the finished state; motion only adds the way in
@@ -661,7 +689,7 @@ export default function StickerSlapFooter({
           }
         }
       }
-    } catch {}
+    } catch { }
     isHydrated.current = true
   }, [storageKey])
 
@@ -670,7 +698,7 @@ export default function StickerSlapFooter({
     if (!storageKey || !isHydrated.current || typeof window === "undefined") return
     try {
       localStorage.setItem(storageKey, JSON.stringify({ moved, order }))
-    } catch {}
+    } catch { }
   }, [moved, order, storageKey])
 
   const word = React.useMemo(() => layoutScript(wordmark), [wordmark])
@@ -762,7 +790,7 @@ export default function StickerSlapFooter({
     return () => {
       cancelAnimationFrame(raf)
       if (lenis?.off) {
-        try { lenis.off("scroll", onScroll) } catch {}
+        try { lenis.off("scroll", onScroll) } catch { }
       }
       window.removeEventListener("scroll", onScroll, { capture: true })
       window.removeEventListener("resize", onScroll)
@@ -889,7 +917,7 @@ export default function StickerSlapFooter({
     if (storageKey && typeof window !== "undefined") {
       try {
         localStorage.removeItem(storageKey)
-      } catch {}
+      } catch { }
     }
     setRun((r) => r + 1)
   }
@@ -1050,10 +1078,10 @@ export default function StickerSlapFooter({
             <button type="button" className="ssf-wm-btn" onClick={replay} aria-label={"Write " + wordmark + " again"}>
               <svg key={run} className="ssf-wm" viewBox={[vbX, vbY, vbW, vbH].map(round).join(" ")} aria-hidden="true" focusable="false">
                 <g transform={"skewX(-9)"}>
-                <path d={word.main} data-draw="" style={{ "--dur": drawDur + "s", "--at": writeAt + "s" } as React.CSSProperties} />
-                {word.extra.map((d, k) => (
-                  <path key={k} d={d} data-draw="" style={{ "--dur": ".28s", "--at": round(writeAt + drawDur + k * 0.16) + "s" } as React.CSSProperties} />
-                ))}
+                  <path d={word.main} data-draw="" style={{ "--dur": drawDur + "s", "--at": writeAt + "s" } as React.CSSProperties} />
+                  {word.extra.map((d, k) => (
+                    <path key={k} d={d} data-draw="" style={{ "--dur": ".28s", "--at": round(writeAt + drawDur + k * 0.16) + "s" } as React.CSSProperties} />
+                  ))}
                 </g>
               </svg>
             </button>
