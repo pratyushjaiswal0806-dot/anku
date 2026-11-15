@@ -149,42 +149,64 @@
       </section>
 
       <!-- ═════════ 02 · EXPERTISE ═════════ -->
-      <section class="offering" id="expertise">
-        <div class="sec-head">
-          <h2 class="h2">the full <em>offering</em></h2>
-          <p class="sec-head__aside">Four things I do, end to end: from the brief behind the brief to the reel on the feed.</p>
+      <section class="offering" id="expertise" aria-labelledby="offering-heading">
+        <div class="offering__head">
+          <h2 class="offering__title display" id="offering-heading">the full <em>offering</em></h2>
+          <span class="offering__curated smallcaps">curated by ankita shah</span>
         </div>
-        <div class="services">
-          <article class="service service--olive">
-            <span class="service__tab">01</span>
-            <h3 class="service__title">marketing strategy <em>&amp; management</em></h3>
-            <p>Positioning, planning and the business problem first: the brief behind the brief. Every business has different goals, so no two strategies should look alike.</p>
-            <ul class="service__list"><li>brand positioning</li><li>launch roadmaps</li><li>campaign planning</li></ul>
-          </article>
-          <article class="service service--mauve">
-            <span class="service__tab">02</span>
-            <h3 class="service__title">social media strategy <em>&amp; management</em></h3>
-            <p>Calendars, campaigns, communities, and the numbers that prove they’re working. Enterprise pages at Adani to a creator’s feed at 150K+ views.</p>
-            <ul class="service__list"><li>content calendars</li><li>community &amp; ORM</li><li>analytics &amp; reporting</li></ul>
-          </article>
-          <article class="service service--blush">
-            <span class="service__tab">03</span>
-            <h3 class="service__title">content direction <em>&amp; scripting</em></h3>
-            <p>From a line on a brief to a reel on a feed: scripted, shot and edited with intent, in more than one language.</p>
-            <ul class="service__list"><li>scripts &amp; storyboards</li><li>shoot direction</li><li>multi-language reels</li></ul>
-          </article>
-          <article class="service service--red">
-            <span class="service__tab">04</span>
-            <h3 class="service__title">creator &amp; brand <em>collaborations</em></h3>
-            <p>Sourcing, briefing and negotiating with creators, not just posting on their behalf. Tier logic, outreach, and briefs that get answered.</p>
-            <ul class="service__list"><li>creator sourcing &amp; tiers</li><li>briefs &amp; negotiation</li><li>collab campaigns</li></ul>
-          </article>
-        </div>
-        <div class="approach">
-          <span class="smallcaps approach__label">the approach</span>
-          <p class="approach__lead">I believe there’s <em>no one-size-fits-all</em> approach to marketing.</p>
-          <p class="approach__text">The best marketing starts with understanding people and solving the right business problem: insight-driven, collaborative, and focused on real business impact.</p>
-        </div>
+
+        <ol class="offering-stack" role="list" aria-label="Marketing services and offerings">
+          <li class="folder folder--olive is-open" style="--x:12%; --w:34%; z-index:1;">
+            <h3 class="folder__tab"><button class="folder__btn" type="button" aria-expanded="true" aria-controls="folder-0"><span>Brand Identity<br>&amp; Visual Design</span><i class="folder__plus" aria-hidden="true"></i></button></h3>
+            <div class="folder__body" id="folder-0" role="region">
+              <div class="folder__content">
+                <p class="folder__desc">Visual systems that make a brand recognisable in half a second: logo, typography, colour and art direction.</p>
+                <ul class="folder__tags" aria-label="Deliverables"><li class="offering-chip">visual identity</li><li class="offering-chip">art direction</li><li class="offering-chip">brand guidelines</li></ul>
+                <p class="folder__outcome"><b>→</b> recognisable on every touchpoint</p>
+              </div>
+            </div>
+          </li>
+          <li class="folder folder--pink" style="--x:58%; --w:28%; z-index:2;">
+            <h3 class="folder__tab"><button class="folder__btn" type="button" aria-expanded="false" aria-controls="folder-1"><span>Social Media<br>Curation</span><i class="folder__plus" aria-hidden="true"></i></button></h3>
+            <div class="folder__body" id="folder-1" role="region">
+              <div class="folder__content">
+                <p class="folder__desc">Content systems, not random posts: pillars, calendars and reels scripted to earn attention and community.</p>
+                <ul class="folder__tags" aria-label="Deliverables"><li class="offering-chip">content pillars</li><li class="offering-chip">reels &amp; scripting</li><li class="offering-chip">community</li></ul>
+                <p class="folder__outcome"><b>→</b> a feed with a heartbeat</p>
+              </div>
+            </div>
+          </li>
+          <li class="folder folder--red" style="--x:6%; --w:26%; z-index:3;">
+            <h3 class="folder__tab"><button class="folder__btn" type="button" aria-expanded="false" aria-controls="folder-2"><span>Packaging</span><i class="folder__plus" aria-hidden="true"></i></button></h3>
+            <div class="folder__body" id="folder-2" role="region">
+              <div class="folder__content">
+                <p class="folder__desc">Structure, print and unboxing designed to win the shelf and the share.</p>
+                <ul class="folder__tags" aria-label="Deliverables"><li class="offering-chip">structural form</li><li class="offering-chip">unboxing</li><li class="offering-chip">shelf presence</li></ul>
+                <p class="folder__outcome"><b>→</b> the pick at point of purchase</p>
+              </div>
+            </div>
+          </li>
+          <li class="folder folder--olive2" style="--x:62%; --w:30%; z-index:4;">
+            <h3 class="folder__tab"><button class="folder__btn" type="button" aria-expanded="false" aria-controls="folder-3"><span>Campaigns<br>&amp; Go-to-Market</span><i class="folder__plus" aria-hidden="true"></i></button></h3>
+            <div class="folder__body" id="folder-3" role="region">
+              <div class="folder__content">
+                <p class="folder__desc">Launch plans and integrated campaigns built on one big idea and carried across every channel.</p>
+                <ul class="folder__tags" aria-label="Deliverables"><li class="offering-chip">launch strategy</li><li class="offering-chip">channel mix</li><li class="offering-chip">influencer &amp; PR</li></ul>
+                <p class="folder__outcome"><b>→</b> attention that turns into demand</p>
+              </div>
+            </div>
+          </li>
+          <li class="folder folder--wine" style="--x:20%; --w:30%; z-index:5;">
+            <h3 class="folder__tab"><button class="folder__btn" type="button" aria-expanded="false" aria-controls="folder-4"><span>Brand Strategy<br>&amp; Positioning</span><i class="folder__plus" aria-hidden="true"></i></button></h3>
+            <div class="folder__body" id="folder-4" role="region">
+              <div class="folder__content">
+                <p class="folder__desc">Where marketing starts: audience insight and whitespace, distilled into a positioning people repeat back.</p>
+                <ul class="folder__tags" aria-label="Deliverables"><li class="offering-chip">audience research</li><li class="offering-chip">competitor audit</li><li class="offering-chip">messaging</li></ul>
+                <p class="folder__outcome"><b>→</b> a clear reason to choose you</p>
+              </div>
+            </div>
+          </li>
+        </ol>
       </section>
 
       <!-- ═════════ 03 · SELECTED WORKS ═════════ -->

@@ -132,6 +132,7 @@ const rise = (targets, trigger, extra = {}) => {
 export function animate() {
   initTarot();
   initSign();
+  initFolders();
 
   if (reduceMotion) {
     $$('.works [data-count]').forEach((el) => countUp(el));
@@ -184,8 +185,8 @@ export function animate() {
   });
 
   /* — 02 Expertise — */
-  rise('.service', '.services', { y: 80, stagger: 0.1 });
-  rise('.approach > *', '.approach');
+  rise('.offering__head > *', '.offering__head', { stagger: 0.08 });
+  rise('.folder', '.offering-stack', { y: 24, opacity: 0, stagger: 0.1, duration: 1.0 });
 
   /* — 03 Works — */
   $$('.works .work-card').forEach((card) => {
@@ -236,6 +237,29 @@ function initTarot() {
     ry(nx * 16);
     rx(-ny * 12);
     gx(nx * -30);
+  });
+}
+
+function initFolders() {
+  const folders = $$('.folder');
+  if (!folders.length) return;
+  const btns = folders.map((f) => $('.folder__btn', f));
+  const set = (f, open) => {
+    f.classList.toggle('is-open', open);
+    $('.folder__btn', f).setAttribute('aria-expanded', String(open));
+  };
+  folders.forEach((f, i) => {
+    btns[i].addEventListener('click', () => {
+      const willOpen = !f.classList.contains('is-open');
+      folders.forEach((o) => set(o, false));
+      set(f, willOpen);
+    });
+    btns[i].addEventListener('keydown', (e) => {
+      const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      btns[(i + d + btns.length) % btns.length].focus();
+    });
   });
 }
 
