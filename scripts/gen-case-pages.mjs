@@ -19,8 +19,6 @@ const shell = ({ title, description, body, main, entry = body.match(/data-page="
     <meta name="description" content="${esc(description)}" />
     <meta name="theme-color" content="#5a1820" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/poppins-700-normal-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/manrope-normal-latin.woff2" crossorigin />
     <script>try{var d=document.documentElement;d.classList.add('no-loader');if(sessionStorage.getItem('as-nav'))d.classList.add('is-arriving')}catch(e){}</script>
     <script type="module" src="/src/entries/${entry}.js"></script>
   </head>
