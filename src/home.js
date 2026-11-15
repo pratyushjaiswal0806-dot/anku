@@ -5,7 +5,7 @@ import { toast } from './motion/interactions.js';
 import { cases, featured } from './data/cases.js';
 import { workCard } from './work-card.js';
 
-const LOGO = (n) => `/assets/logos/${n}.png`;
+const LOGO = (n) => `/assets/logos/${n}.webp`;
 
 /* The snapshot: every brand, one frame each */
 const brands = [
@@ -141,13 +141,18 @@ export function animate() {
 
   /* — Hero — */
   const loop = gsap.to('.marquee__track', { xPercent: -25, duration: 26, ease: 'none', repeat: -1 });
+  // Each scroll frame used to stack another 1.4s tween. Now one settle timer is re-armed per frame.
+  let settle = null;
   ScrollTrigger.create({
     start: 0,
     end: 'max',
     onUpdate: (self) => {
       const v = self.getVelocity();
       gsap.to(loop, { timeScale: self.direction * (1 + Math.min(Math.abs(v) / 300, 5)), duration: 0.2, overwrite: true });
-      gsap.to(loop, { timeScale: self.direction, duration: 1.4, delay: 0.25, ease: 'power2.out' });
+      settle?.kill();
+      settle = gsap.delayedCall(0.25, () => {
+        gsap.to(loop, { timeScale: self.direction, duration: 1.4, ease: 'power2.out', overwrite: true });
+      });
     },
   });
   gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
@@ -166,7 +171,10 @@ export function animate() {
     start: 'top 55%',
     once: true,
     onEnter: () => {
-      gsap.timeline()
+      // Promote the frames only while their blur/grayscale tween runs, so the filter isn't repainted every frame.
+      const media = $$('.brand__mark img, .brand__word');
+      media.forEach((el) => { el.style.willChange = 'filter'; });
+      gsap.timeline({ onComplete: () => media.forEach((el) => { el.style.willChange = ''; }) })
         .to('.flash', { opacity: 0.85, duration: 0.08, ease: 'none' })
         .to('.flash', { opacity: 0, duration: 0.9, ease: 'power2.out' })
         .fromTo(

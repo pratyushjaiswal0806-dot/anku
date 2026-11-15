@@ -4,6 +4,8 @@ import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.config({ nullTargetWarn: false });
+// Mobile browsers fire resize when the URL bar shows/hides; don't re-measure every trigger for that.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 export const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;

@@ -1,3 +1,4 @@
+import './styles/fonts.css';
 import './styles/base.css';
 import './styles/home.css';
 import './styles/case.css';
@@ -14,18 +15,12 @@ import { initTransitions, initHeader, initFooter, initReveals } from './motion/c
 if (reduceMotion) document.documentElement.classList.add('reduce-motion');
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-async function boot() {
+/** Shared bootstrap. Each page entry in src/entries/ hands in its own page module. */
+export async function boot(mod) {
   initScroll();
   initTransitions();
 
-  const page = document.body.dataset.page;
   // Page modules render their DOM first, then the shared chrome wires up to it.
-  const mod =
-    page === 'case' ? await import('./case.js')
-    : page === 'about' ? await import('./about.js')
-    : page === 'work' ? await import('./work.js')
-    : page === 'contact' ? await import('./contact.js')
-    : await import('./home.js');
   mod.render?.();
   doodles.render();
 
@@ -52,8 +47,6 @@ async function boot() {
 
   await mod.intro?.();
 }
-
-boot();
 
 // Keep triggers honest after late-loading images
 window.addEventListener('load', () => ScrollTrigger.refresh());

@@ -95,8 +95,8 @@
    01 · BRANDS — a clean logo wall
    ═════════════════════════════════════════════ */
 .brands { color: var(--sky); padding: var(--section-pad) var(--pad); }
-/* keep the checker tiles sharp: drop the blur that base.css applies to .checker */
-.brands.checker::before { filter: saturate(1.05); }
+/* home checker stays sharp: a plain conic with saturate(1.05) folded into the colours, so no runtime filter */
+.brands.checker::before { background: repeating-conic-gradient(#5d1720 0 25%, #7d2330 0 50%) 0 0 / 96px 132px; }
 .flash { position: absolute; inset: 0; z-index: 5; background: #fff; opacity: 0; pointer-events: none; }
 .brands .h2 em { color: var(--blush); }
 .brands .sec-head__aside { color: var(--sky-2); }

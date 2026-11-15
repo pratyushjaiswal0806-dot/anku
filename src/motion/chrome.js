@@ -227,9 +227,21 @@ export function initMobileNav() {
 export function initFooter() {
   const host = $('#site-footer');
   if (host) {
-    import('../react/footer.tsx').then((m) => {
-      m.mountFooter(host);
-    });
+    // The React footer sits at the very bottom of every page: load it only as the reader gets close.
+    const mount = () => import('../react/footer.tsx').then((m) => m.mountFooter(host));
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          io.disconnect();
+          mount();
+        },
+        { rootMargin: '0px 0px 1500px 0px' }
+      );
+      io.observe(host);
+    } else {
+      mount();
+    }
     return;
   }
   const list = $('.footer__index--works');
