@@ -10,7 +10,7 @@
 }
 .hero__grid { flex: 1; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(30px, 5vw, 80px); align-items: center; padding-bottom: 30px; }
 
-.hero__title { margin-top: 10px; font-size: clamp(72px, 10.6vw, 176px); color: var(--wine); }
+.hero__title { margin-top: 10px; font-size: clamp(72px, 10.6vw, 176px); color: var(--wine); text-transform: none; }
 .hero__line { display: block; overflow: hidden; padding: 0 0.04em 0.1em; margin: 0 -0.04em -0.1em; }
 .hero__line:first-child { font-size: 0.42em; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 0.08em; }
 .hero__dot { color: var(--cherry); display: inline-block; }
