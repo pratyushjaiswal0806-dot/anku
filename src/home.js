@@ -68,7 +68,6 @@ function heroIntro() {
     .add(() => drawTarot(), 1.25)
     .from(tagWords, { yPercent: 110, duration: 1, stagger: 0.02 }, 0.55)
     .from('.hero__ctas > *', { y: 24, opacity: 0, duration: 1, stagger: 0.08 }, 0.9)
-    .from('.note', { opacity: 0, scale: 0.6, duration: 0.9, stagger: 0.15, ease: 'back.out(2)' }, 1.6)
     .from('.marquee', { opacity: 0, duration: 1.2 }, 1);
 }
 

@@ -56,14 +56,9 @@
 .tarot__art .dots circle { fill: var(--blush); stroke: none; }
 .tarot__art .mono { fill: var(--blush); stroke: none; font-family: var(--serif); font-style: italic; font-size: 32px; }
 
-.note { position: absolute; z-index: 3; color: var(--wine); font-size: 22px; pointer-events: none; white-space: nowrap; }
-.note--a { top: -6%; left: -26%; transform: rotate(-8deg); }
-.note--c { bottom: -9%; right: -6%; transform: rotate(4deg); font-size: 18px; color: var(--wine-2); }
-
 @media (max-width: 900px) {
   .hero__grid { grid-template-columns: 1fr; }
   .hero__cards { order: -1; width: min(56vw, 230px); margin: 20px auto 30px; }
-  .note--a { display: none; }
 }
 
 /* marquee */

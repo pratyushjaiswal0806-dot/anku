@@ -12,7 +12,6 @@
 .dd--hero-star { position: absolute; top: 0.02em; left: 2.35em; width: 0.3em; rotate: 14deg; }
 .dd--hero-spark { position: absolute; bottom: 0.32em; left: 2.95em; width: 0.26em; color: var(--cherry); }
 .hero__ctas { align-items: center; }
-.dd--hero-pen { width: 22px; margin-left: 14px; rotate: 32deg; }
 
 /* home · works — eyes peeking off the heading */
 .dd--peek { width: 0.95em; margin-left: 0.18em; vertical-align: 0.12em; color: var(--cherry); }
@@ -51,7 +50,7 @@
 .dd--cta-eyes { width: 64px; margin-right: 12px; vertical-align: -6px; color: var(--cherry); }
 
 @media (max-width: 860px) {
-  .dd--hero-pen, .dd--notes { display: none; }
+  .dd--notes { display: none; }
   .beyond__kit { position: relative; bottom: auto; margin-top: 30px; width: 200px; }
   .offduty__doodles .dd { width: calc(var(--w) * 0.6); opacity: 0.55; }
   .offduty__doodles .dd:nth-child(3), .offduty__doodles .dd:nth-child(5), .offduty__doodles .dd--sm:nth-child(even) { display: none; }
